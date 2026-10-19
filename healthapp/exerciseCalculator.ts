@@ -18,7 +18,7 @@ export const calculateExercises = (hoursPerWeek: number[], target: number) : Res
   }
 
   if ( target <=0 || Number(isNaN(target)) ) {
-    throw new Error('Target must be a positive number')
+    throw new Error('Target must be a positive number');
   }
 
   const periodLength = hoursPerWeek.length;
@@ -60,7 +60,7 @@ if(process.argv[1] === import.meta.filename) {
     console.log(calculateExercises(hoursPerWeek, target));
   } catch(error: unknown) {
     if (error instanceof Error) {
-      console.error('Error:', error.message)
+      console.error('Error:', error.message);
     }
   }
 }
