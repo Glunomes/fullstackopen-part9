@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json())
 
 app.get('/hello', (_req, res) => {
-  res.send('Hello Full Stack');
+  res.send('Hello Full Stack!');
 });
 
 app.get('/bmi', (req, res) => {
@@ -32,7 +32,7 @@ app.post('/exercises', (req, res) => {
 
   if(!daily_exercises || !target || target === undefined) {
     return res.status(400).json({
-      error: 'parametrs missing'
+      error: 'parameters missing'
     });
   }
 
@@ -53,7 +53,7 @@ app.post('/exercises', (req, res) => {
   return res.json( result );
 })
 
-const PORT = 3003;
+const PORT = 3000;
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
