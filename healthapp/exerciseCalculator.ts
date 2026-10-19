@@ -13,9 +13,15 @@ const calculateExercises = (hoursPerWeek: number[]) : Result => {
     throw new Error ('You provided an empty data about training hours')
   }
 
+  if ( hoursPerWeek.some(h => Number.isNaN(h)) ) {
+    throw new Error('You provided not a number list')
+  }
+
+  
+
   const periodLength = hoursPerWeek.length;
-  const trainingDays = hoursPerWeek.filter(h => h!== 0).length;
-  const target = 2;
+  const trainingDays = hoursPerWeek.filter(h => h > 0).length;
+  const target = Number(process.argv[2])
   const average = hoursPerWeek.reduce((acc, curr) => acc + curr, 0) / periodLength;
   const success = target <= average;
 
@@ -45,4 +51,7 @@ const calculateExercises = (hoursPerWeek: number[]) : Result => {
   }
 }
 
-console.log(calculateExercises([0,3,5,1,2,0]))
+const arrOfDays = process.argv.slice(3)
+const hoursPerWeek: number[] = arrOfDays.map(day => Number(day))
+
+console.log(calculateExercises(hoursPerWeek))
