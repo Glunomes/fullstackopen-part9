@@ -1,4 +1,4 @@
-const calculateBmi = (height: number, weight: number) : string => {
+export const calculateBmi = (height: number, weight: number) : string => {
   if( height <= 0 || weight <= 0 || isNaN(height) || isNaN(weight) ) {
     throw new Error('Your height/weight is not a number or your height is not real');
   }
@@ -17,7 +17,17 @@ const calculateBmi = (height: number, weight: number) : string => {
   return 'Obese range';
 }
 
-const height: number = Number(process.argv[2])
-const weight: number = Number(process.argv[3])
 
-console.log(calculateBmi(height,weight))
+if(process.argv[1] === import.meta.filename) {
+  const height = Number(process.argv[2]);
+  const weight = Number(process.argv[3]);
+
+  try {
+    console.log(calculateBmi(height, weight))
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error:', error.message)
+    }
+  }
+}
+
