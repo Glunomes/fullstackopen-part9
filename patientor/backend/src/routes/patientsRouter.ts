@@ -1,26 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import patientsService from "../services/patientsService.ts";
-import type { ConfedentialPatient, Patient, NewPatient } from "../types/patient.ts";
-import express, { type Response, type Request } from 'express';
+import type { ConfidentialPatient} from "../types/patient.ts";
+import express, { type Response} from 'express';
+import parseNewPatient from "../utils/parseNewPatient.ts";
 
 const router = express.Router();
 
-router.get( '/', (_req, res: Response<ConfedentialPatient[]> ) => {
+router.get( '/', (_req, res: Response<ConfidentialPatient[]> ) => {
   res.send(patientsService.getConfedentialPatients());
 });
 
-router.post( '/', (req:Request<NewPatient>, res: Response<Patient>) => {
-  const { name, dateOfBirth, ssn, gender, occupation } = req.body;
-  
-  const newPatient = patientsService.addNewPatient({
-    name,
-    dateOfBirth,
-    ssn,
-    gender,
-    occupation
-  });
-
-  res.json(newPatient);
+router.post( '/', (req, res) => { 
+  try{
+    const parsedPatient = parseNewPatient(req.body);
+    const addedPatient = patientsService.addNewPatient(parsedPatient);
+    res.json(addedPatient);
+  } catch(error: unknown) {
+    if(error instanceof Error) {
+      res.status(400).send(`Something went wrong. Error: ${error.message}`);
+    }
+  }
 });
 
 export default router;
