@@ -1,15 +1,13 @@
-export interface Patient {
-  id: string,
-  name: string,
-  dateOfBirth: string,
-  ssn: string,
-  gender: Gender,
-  occupation: string,
+import { newPatientSchema } from "../utils/parseNewPatient.ts";
+import { z } from 'zod';
+
+export interface Patient extends NewPatient {
+  id: string;
 }
 
 export type ConfidentialPatient = Omit<Patient, 'ssn'>;
 
-export type NewPatient = Omit<Patient, 'id'>;
+export type NewPatient = z.infer<typeof newPatientSchema>;
 
 export const Gender = {
   Male: 'male',
