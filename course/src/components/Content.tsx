@@ -1,19 +1,37 @@
-interface CoursePart {
-  name: string,
-  exerciseCount: number,
+import Part from "./Part";
+
+interface CoursePartBase {
+  name: string;
+  exerciseCount: number;
 }
 
+interface CoursePartDescription extends CoursePartBase{
+  description: string;
+}
 
-const Content = ( { courseParts }: { courseParts:CoursePart[]}) => {
-  return (
-    <>
-      {courseParts.map(course => (
-        <p key={course.name}>
-          {course.name} {course.exerciseCount}
-        </p>
-      ))}
-    </>
-  )
+interface CoursePartBasic extends CoursePartDescription {
+  kind: "basic"
+}
+
+interface CoursePartGroup extends CoursePartBase {
+  groupProjectCount: number;
+  kind: "group"
+}
+
+interface CoursePartBackground extends CoursePartDescription {
+  backgroundMaterial: string;
+  kind: "background"
+}
+
+interface CoursePartSpecial extends CoursePartDescription {
+  requirements: string[];
+  kind: "special"
+}
+
+export type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartSpecial;
+
+const Content = ( { courseParts }: { courseParts: CoursePart[]}) => {
+  return <Part courseParts={courseParts} />
 }
 
 export default Content;
