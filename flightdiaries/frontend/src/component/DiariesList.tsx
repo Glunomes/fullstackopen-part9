@@ -1,21 +1,22 @@
 import type { DiaryEntry } from "../types";
 
-interface DiaryList {
-  diaries: DiaryEntry[]
+interface DiariesListProps {
+  diaries: DiaryEntry[];
 }
 
-const DiariesList = (props: DiaryList) => {
+const DiariesList = ({ diaries }: DiariesListProps) => {
   return (
     <div>
-      <ul>
-        {props.diaries.map(d => (
-          <li key={d.id}>
-            <p>{d.weather} {d.visibility} {d.date} {d.comment} </p>
-          </li>
-        ))}
-      </ul>
+      <h2>Diary entries</h2>
+      {diaries.map((entry) => (
+        <div key={entry.id} style={{ marginBottom: "1.5rem" }}>
+          <h3 style={{ margin: "0.5rem 0" }}>{entry.date}</h3>
+          <div>visibility: {entry.visibility}</div>
+          <div>weather: {entry.weather}</div>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export default DiariesList;
