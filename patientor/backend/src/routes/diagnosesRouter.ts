@@ -5,7 +5,7 @@ import type { Diagnose } from '../types/diagnoses.ts';
 const router = express.Router();
 
 router.get('/', (_req, res: Response<Diagnose[]>) => {
-  res.send(diagnoseService.getAllDiagnoses());
+  return res.send(diagnoseService.getAllDiagnoses());
 });
 
 export default router;

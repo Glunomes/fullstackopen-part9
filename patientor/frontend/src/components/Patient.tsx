@@ -1,9 +1,13 @@
 import { useParams } from "react-router-dom";
-import type { Patient } from "../types";
+import {type Patient, type Diagnosis } from "../types";
 import patientService from '../services/patients';
 import { useState, useEffect } from "react";
 
-const PatientPage = () => {
+interface Props {
+  diagnoses: Diagnosis[],
+}
+
+const PatientPage = ({ diagnoses }: Props) => {
   const id = useParams().id;
   const [patient, setPatient] = useState<Patient | null>(null);
 
@@ -23,7 +27,7 @@ const PatientPage = () => {
   if(!patient) {
     return <h2>Loading or no patient data found...</h2>;
   }
-  
+
   const showEntries = (entries: Patient['entries']) => {
     return entries.map(e => (
       <div key={e.id}>
@@ -31,7 +35,7 @@ const PatientPage = () => {
         <ul>
           {e.diagnosisCodes?.map(d => (
             <li key={d}>
-              {d}
+              {d} {diagnoses.find( diagnose => diagnose.code === d)?.name}
             </li>
           ))}
         </ul>
