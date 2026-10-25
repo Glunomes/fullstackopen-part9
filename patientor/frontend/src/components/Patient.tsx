@@ -3,7 +3,7 @@ import {type Patient, type Diagnosis, type Entry } from "../types";
 import patientService from '../services/patients';
 import { useState, useEffect } from "react";
 import EntryDetail from "./PatientsDetail/EntryDetail";
-import EntryForm from "./EntryForm";
+import EntryForm from "./EntryForm/EntryForm";
 
 interface Props {
   diagnoses: Diagnosis[],
