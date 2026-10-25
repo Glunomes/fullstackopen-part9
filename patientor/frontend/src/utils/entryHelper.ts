@@ -34,6 +34,13 @@ export const createEntryPayload = (formData: EntryFormData): EntryWithoutId => {
       };
 
     case 'Hospital':
+
+      const {date,criteria} = formData.discharge ?? {};
+
+      if(!date?.trim() || !criteria?.trim()) {
+        throw new Error('For entry discharge fields must be both filled or both empty');
+      }
+
       return {
         ...baseEntry,
         type: 'Hospital',
@@ -46,7 +53,7 @@ export const createEntryPayload = (formData: EntryFormData): EntryWithoutId => {
         type: 'OccupationalHealthcare',
         employerName: formData.employerName,
         sickLeave:
-          formData.sickLeave.startDate && formData.sickLeave.endDate
+          formData.sickLeave?.startDate && formData.sickLeave?.endDate
             ? formData.sickLeave
             : undefined,
       };
