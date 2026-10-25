@@ -1,11 +1,11 @@
-import type { EntryType, EntryWithoutId, HealthCheckRating, Discharge } from "../types";
+import type { EntryType, EntryWithoutId, HealthCheckRating, Discharge, Diagnosis } from "../types";
 
 interface EntryFormData {
   entryType: EntryType;
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes: string;
+  diagnosisCodes: Array<Diagnosis['code']>;
   healthCheckRating: HealthCheckRating;
   discharge: Discharge;
   employerName: string;
@@ -13,16 +13,11 @@ interface EntryFormData {
 }
 
 export const createEntryPayload = (formData: EntryFormData): EntryWithoutId => {
-  const diagnosis = formData.diagnosisCodes
-    .split(',')
-    .map(c => c.trim())
-    .filter(c => c.length > 0);
-
   const baseEntry = {
     description: formData.description,
     date: formData.date,
     specialist: formData.specialist,
-    diagnosisCodes: diagnosis.length > 0 ? diagnosis : undefined,
+    diagnosisCodes: formData.diagnosisCodes.length > 0 ? formData.diagnosisCodes : undefined,
   };
 
   switch (formData.entryType) {
@@ -33,11 +28,10 @@ export const createEntryPayload = (formData: EntryFormData): EntryWithoutId => {
         healthCheckRating: formData.healthCheckRating,
       };
 
-    case 'Hospital':
+    case 'Hospital': {
+      const { date, criteria } = formData.discharge ?? {};
 
-      const {date,criteria} = formData.discharge ?? {};
-
-      if(!date?.trim() || !criteria?.trim()) {
+      if (!date?.trim() || !criteria?.trim()) {
         throw new Error('For entry discharge fields must be both filled or both empty');
       }
 
@@ -46,6 +40,7 @@ export const createEntryPayload = (formData: EntryFormData): EntryWithoutId => {
         type: 'Hospital',
         discharge: formData.discharge,
       };
+    }
 
     case 'OccupationalHealthcare':
       return {
@@ -57,5 +52,8 @@ export const createEntryPayload = (formData: EntryFormData): EntryWithoutId => {
             ? formData.sickLeave
             : undefined,
       };
+
+    default:
+      throw new Error(`Unhandled entry type: ${(formData as { entryType: string }).entryType}`);
   }
 };

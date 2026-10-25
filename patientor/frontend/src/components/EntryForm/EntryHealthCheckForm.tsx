@@ -1,3 +1,11 @@
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  Box,
+} from "@mui/material";
 import { HealthCheckRating } from "../../types";
 
 interface Props {
@@ -5,29 +13,41 @@ interface Props {
   setHealthCheckRating: (rating: HealthCheckRating) => void;
 }
 
-const EntryHealthCheckForm = ({ healthCheckRating, setHealthCheckRating }: Props) => {
-  const isHealthCheckRating = (val: number): val is HealthCheckRating => {
-    return Object.values(HealthCheckRating).includes(val as HealthCheckRating);
-  };
+const ratingOptions = Object.entries(HealthCheckRating).map(([key, value]) => ({
+  value: value as HealthCheckRating,
+  label: `${value} — ${key}`,
+}));
 
-  const onChangeRating = (value: string) => {
-    const numericValue = Number(value);
-    if (isHealthCheckRating(numericValue)) {
-      setHealthCheckRating(numericValue);
+const EntryHealthCheckForm = ({
+  healthCheckRating,
+  setHealthCheckRating,
+}: Props) => {
+  const handleChange = (event: SelectChangeEvent<number>) => {
+    const value = Number(event.target.value);
+    if ((Object.values(HealthCheckRating) as number[]).includes(value)) {
+      setHealthCheckRating(value as HealthCheckRating);
     }
   };
 
   return (
-    <div>
-      <label>Health Check Rating (0-3): </label>
-      <input
-        type="number"
-        min={0}
-        max={3}
-        value={healthCheckRating}
-        onChange={({ target }) => onChangeRating(target.value)}
-      />
-    </div>
+    <Box sx={{ mb: 2 }}>
+      <FormControl fullWidth size="small">
+        <InputLabel id="healthcheck-rating-label">Health Check Rating</InputLabel>
+        <Select
+          labelId="healthcheck-rating-label"
+          id="healthcheck-rating-select"
+          value={healthCheckRating}
+          label="Health Check Rating"
+          onChange={handleChange}
+        >
+          {ratingOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 

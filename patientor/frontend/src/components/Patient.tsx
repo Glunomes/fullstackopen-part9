@@ -47,7 +47,7 @@ const PatientPage = ({ diagnoses }: Props) => {
             <EntryDetail entry={e} diagnoses={diagnoses} />
           </div>
         ))}
-        <EntryForm id={id} onNewEntry={handleNewEntry} />
+        <EntryForm id={id} onNewEntry={handleNewEntry} diagnoses={diagnoses} />
       </div>
     );
   };
