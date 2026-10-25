@@ -178,7 +178,7 @@ const EntryForm = ({ id, onNewEntry, diagnoses, onClose }: Props) => {
 
         <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
           <Button type="submit" variant="contained" color="primary">
-            ADD
+            Add New Entry
           </Button>
           <Button type="button" variant="outlined" color="primary" onClick={handleCancel}>
             CANCEL
